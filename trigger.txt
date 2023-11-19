@@ -1,0 +1,128 @@
+create or replace trigger T1
+before update or insert or delete on l
+for each row
+begin
+	insert into la values(:old.id,:old.bname,:old.status);
+end;
+/
+
+/*
+SQL> create role myrole1;   
+
+Role created.
+
+SQL> grant create session to myrole1;
+
+Grant succeeded.
+
+SQL> create user manasi identified by 123;
+
+User created.
+
+SQL> grant myrole1 to manasi;
+
+Grant succeeded.
+
+SQL> grant connect,resource,dba to manasi;
+
+Grant succeeded.
+
+SQL> conn manasi;
+Enter password: 
+Connected.
+SQL> create table l(id int,bname varchar(10),status varchar(1));
+
+Table created.
+
+SQL> create table la(id int,bname varchar(10),status varchar(1));
+
+Table created.
+SQL> insert into l values(1,'c','I');
+
+1 row created.
+
+SQL> insert into l values(2,'oop','I');
+
+1 row created.
+
+SQL> insert into l values(3,'c++','I');
+
+1 row created.
+
+SQL> select *from l;
+
+	ID BNAME      S
+---------- ---------- -
+	 1 c	      I
+	 2 oop	      I
+	 3 c++	      I
+
+SQL> @Assignment_8.sql;
+
+Trigger created.
+
+SQL> select *from l;
+
+	ID BNAME      S
+---------- ---------- -
+	 1 c	      I
+	 2 oop	      I
+	 3 c++	      I
+
+SQL> update l set status='R' where id=3;
+
+1 row updated.
+
+SQL> select * from la;
+
+	ID BNAME      S
+---------- ---------- -
+	 3 c++	      I
+
+SQL> select *from l;
+
+	ID BNAME      S
+---------- ---------- -
+	 1 c	      I
+	 2 oop	      I
+	 3 c++	      R
+
+SQL> delete from l where id=1;
+
+1 row deleted.
+
+SQL> select *from l;
+
+	ID BNAME      S
+---------- ---------- -
+	 2 oop	      I
+	 3 c++	      R
+
+SQL> select *from la;
+
+	ID BNAME      S
+---------- ---------- -
+	 3 c++	      I
+	 1 c	      I
+
+SQL> insert into l values(4,'f','i');
+
+1 row created.
+
+SQL> select *from l;
+
+	ID BNAME      S
+---------- ---------- -
+	 2 oop	      I
+	 3 c++	      R
+	 4 f	      i
+
+SQL> select *from la;
+
+	ID BNAME      S
+---------- ---------- -
+	 3 c++	      I
+	 1 c	      I
+
+
+*/
