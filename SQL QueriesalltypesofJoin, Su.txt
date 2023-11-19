@@ -1,0 +1,15 @@
+SQL Queries – all types of Join, Sub-Query and View: Write at least10 SQL queries for suitable database application using SQL DML statements. Note: Instructor will design the queries which
+demonstrate the use of concepts like all types of Join ,Sub-Query and View
+
+
+select Emp_Name, Salary FROM employee1 WHERE Salary IN (SELECT MAX(Salary) FROM employee1);
+
+select COUNT(*) AS "Not Joined in 2015" FROM employee1 WHERE Joining_Date NOT BETWEEN '01-01-2015' AND '31-12-2015';
+
+select * from employee1 WHERE Joining_Date BETWEEN '01-01-2013' AND '31-12-2013';
+
+
+select SUM(Salary) AS "Total Salary" FROM employee1;
+
+select LOWER(Emp_Name) FROM employee1;
+

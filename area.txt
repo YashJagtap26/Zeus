@@ -1,0 +1,14 @@
+Declare
+	radius number;
+	area number;
+Begin
+	for radius in 5..9 LOOP
+		area := 3.14*radius*radius;
+		insert into Areas(Radius,Area) values(radius,area);
+	end loop;
+	dbms_output.put_line('Areas are calculated from 5 to 9');
+end;
+
+CREATE TABLE areas (radius NUMBER,area NUMBER);
+
+select * from areas;

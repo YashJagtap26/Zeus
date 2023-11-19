@@ -1,0 +1,40 @@
+Declare
+	rno borrower.Roll_no%type :='&Roll_no';
+	bname borrower.Book_name%type := '&Book_name';
+	no_of_days int;
+	issue_date date; 
+	fine int;
+Begin
+	select DOI into issue_date from borrower where Roll_no=rno;
+	no_of_days := sysdate - issue_date;
+	if(no_of_days >=15 and no_of_days <=30) then
+		dbms_output.put_line('Pay fine of Rs 5 per day');
+		fine := 5*(no_of_days-15);
+	elsif(no_of_days >30) then
+		dbms_output.put_line('Pay fine of Rs 50 per day');
+		fine := 75+(no_of_days - 30)*50;
+	else
+		dbms_output.put_line('No fine');
+		fine := 0;
+	end if;
+	
+	update borrower set Status = 'R' where Roll_no=rno;
+	insert into Fine values(rno,sysdate,fine);
+exception
+	when no_data_found then
+		dbms_output.put_line('No such roll nuber is present');
+		
+end;
+
+create table borrower(Roll_no int,Name varchar2(20),DOI date,Book_name varchar2(20),Status varchar2(1));
+
+create table Fine(Roll_no int,Date1 date,Amount int);
+
+insert into borrower values(1,'Om',to_date('11-11-2023','dd-mm-yyyy'),'c++','I');
+
+set serveroutput on;
+
+@fine.sql;
+
+select  *from Fine;
+

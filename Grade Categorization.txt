@@ -1,0 +1,42 @@
+DECLARE
+	rno StudMarks.RollNo%type := &Roll_Number;
+	m1 number;
+	category varchar(20);
+	n1 varchar(20);
+	my_expect exception;
+
+BEGIN
+	SELECT Total_Marks into m1 from StudMarks WHERE RollNo = rno;
+	SELECT Name into n1 from StudMarks WHERE RollNo = rno;
+
+	IF (m1<0) then
+		raise my_expect;
+	ELSIF (m1<=1500 AND m1>=990) then
+		category:= 'Distinction';
+	ELSIF (m1<=989 AND m1>=900) then
+		category:= 'First Class';
+	ELSIF (m1<=899 AND m1>=825) then
+		category:= 'Higher Secondary Class';
+	ELSIF (m1<=824 AND m1>=400) then
+		category:= 'pass';
+	ELSE
+		category:= 'Fail';
+	END IF;
+
+	INSERT into Result3 values(rno, n1, category);
+
+	exception
+	when my_expect then
+		dbms_output.put_line('Marks in Negative');
+	when no_data_found then
+		dbms_output.put_line('Record not Found');
+END;
+
+
+create table StudMarks (RollNo int primary key, Name varchar(34), Total_Marks int);
+
+create table Result3(RollNo int, Name varchar(34), category varchar(38));
+
+set serveroutput on;
+
+@dbmsl6.sql

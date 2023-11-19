@@ -1,0 +1,63 @@
+declare
+	roll_num ostu.Roll_no%type :='&Roll_no';
+	n1 ostu.Name%type ;
+	age ostu.Age%type;
+	percent ostu.Age%type;
+	record_exists boolean :=false;
+	data_found BOOLEAN := FALSE;  
+	cursor c1 is select *from ostu where Roll_no=roll_num;
+	cursor c2 is select Roll_no from nstu;
+	
+begin
+	open c1;
+	fetch c1 into roll_num,n1,age,percent;
+ 
+ 	IF c1%found THEN
+		for rec in c2 loop
+			if(roll_num = rec.Roll_no)then
+				record_exists :=true;
+				exit;
+			end if;
+		end loop;
+	
+		if not record_exists then
+			insert into nstu values(roll_num,n1,age,percent);
+			dbms_output.put_line('record inserted');
+		else
+			dbms_output.put_line('not inserted');
+		end if;
+	else
+		dbms_output.put_line('no such roll no present');
+	end if;
+	close c1; 	
+end;
+/
+
+/*
+
+OUTPUT :
+
+
+SQL> set serveroutput on
+SQL> @my_explicit.sql
+Record inserted
+
+PL/SQL procedure successfully completed.
+
+SQL> select * from O_Roll_Call;
+
+   ROLL_NO D	    AGE PERCENTAGE
+---------- - ---------- ----------
+	10 A	     18      80.56
+	 8 C	     21      78.34
+	 5 B	     19      72.55
+	 1 A	     19      82.56
+	 4 B	     19       62.5
+
+SQL> select * from N_Roll_Call;
+
+   ROLL_NO D	    AGE PERCENTAGE
+---------- - ---------- ----------
+	 1 A	     19      82.56
+	10 A	     18      80.56
+

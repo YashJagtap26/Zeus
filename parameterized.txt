@@ -1,0 +1,114 @@
+Declare
+	roll_num ostu.Roll_no%type := '&Roll_no';
+	n1 ostu.Name%type;
+	age ostu.Age%type;
+	percent ostu.Percentage%type;
+	record_exists boolean := false;
+
+	cursor cur1(roll_num_param int) is
+		select *from ostu where Roll_no=roll_num_param;
+	cursor cur2 is
+		select Roll_no from nstu;
+begin
+	open cur1(roll_num);
+	fetch cur1 into roll_num,n1,age,percent;
+	IF cur1%found THEN
+		for rec in cur2 loop
+			if (roll_num = rec.Roll_no) then
+				record_exists := true;
+				exit;
+			end if;
+		end loop;
+	
+	
+		if not record_exists then
+			insert into nstu values(roll_num,n1,age,percent);
+			dbms_output.put_line('Record inserted');
+		else
+			dbms_output.put_line('not nserted');
+		
+		end if;
+	else
+		dbms_output.put_line('no such roll no present');
+	end if;
+	close cur1;
+end;
+/
+
+
+
+/*
+SQL> create table ostu(Roll_no int,Name varchar(10),Age int,Percentage int);
+
+Table created.
+
+SQL> create table nstu(Roll_no int,Name varchar(10),Age int,Percentage int);
+
+Table created.
+
+SQL> insert into ostu values(1,'a',12,90);
+
+1 row created.
+
+SQL> insert into ostu values(2,'b',45,45);
+
+1 row created.
+
+SQL> insert into ostu values(3,'c',56,23);
+
+1 row created.
+
+SQL> select *from ostu;
+
+   ROLL_NO NAME 	     AGE PERCENTAGE
+---------- ---------- ---------- ----------
+	 1 a		      12	 90
+	 2 b		      45	 45
+	 3 c		      56	 23
+
+SQL> @f7p.sql;
+Enter value for roll_no: 5
+old   2: 	roll_num ostu.Roll_no%type := '&Roll_no';
+new   2: 	roll_num ostu.Roll_no%type := '5';
+no such roll no present
+
+PL/SQL procedure successfully completed.
+
+SQL> @f7p.sql;
+Enter value for roll_no: 1
+old   2: 	roll_num ostu.Roll_no%type := '&Roll_no';
+new   2: 	roll_num ostu.Roll_no%type := '1';
+Record inserted
+
+PL/SQL procedure successfully completed.
+
+SQL> select *from nstu;
+
+   ROLL_NO NAME 	     AGE PERCENTAGE
+---------- ---------- ---------- ----------
+	 1 a		      12	 90
+
+SQL> @f7p.sql;
+Enter value for roll_no: 2
+old   2: 	roll_num ostu.Roll_no%type := '&Roll_no';
+new   2: 	roll_num ostu.Roll_no%type := '2';
+Record inserted
+
+PL/SQL procedure successfully completed.
+
+SQL> @f7p.sql;
+Enter value for roll_no: 2
+old   2: 	roll_num ostu.Roll_no%type := '&Roll_no';
+new   2: 	roll_num ostu.Roll_no%type := '2';
+not nserted
+
+PL/SQL procedure successfully completed.
+
+SQL> select *from nstu;
+
+   ROLL_NO NAME 	     AGE PERCENTAGE
+---------- ---------- ---------- ----------
+	 1 a		      12	 90
+	 2 b		      45	 45
+
+*/

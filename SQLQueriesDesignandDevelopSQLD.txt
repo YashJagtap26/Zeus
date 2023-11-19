@@ -1,0 +1,61 @@
+SQL Queries: Design and Develop SQLDDL statements which demonstrate the use of SQL objects such as Table, View, Index, Sequence,
+Synonym, different constraints etc.
+a. Write at least 10 SQL queries on the suitable
+database application using SQL DML statements.
+
+create table employee(emp_name varchar(30),Designation varchar(15),Stream varchar(15),City varchar(15));
+create table workers(emp_name varchar(30),Company_name varchar(15),Salary int);    
+create table company(Company_name varchar(30),Manager_name varchar(15));
+
+select emp_name from employee
+union
+select emp_name from workers;
+
+select emp_name,salary from workers
+where
+salary>30000;
+
+select emp_name,company_name from workers
+where
+company_name='TCL';
+
+select emp_name,salary,company_name from workers
+where
+salary>25000 AND company_name='VIPRO';
+
+select emp_name,workers.company_name,company.manager_name from workers,company 
+where
+workers.company_name=company.company_name AND manager_name='Rahul';
+
+select max(company_name)
+from workers
+union
+select max(company_name)
+from workers;
+
+select * from employee order by city;
+
+select max(salary) from workers;
+
+select emp_name from employee where emp_name like'S%'
+union
+select emp_name from workers where emp_name like'S%';
+
+create view my_view as
+select emp_name,company_name
+from employee;
+
+delete from my_view
+where emp_name='Sangram';
+
+create index index_emp
+on employee(emp_name);
+
+create sequence my_seq 
+start with 25000
+increment by 2500;
+
+create synonym my_synonym
+for workers.compony_name;
+
+

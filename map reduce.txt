@@ -1,0 +1,9 @@
+db.createCollection('data')
+
+db.data.insert({id:1,name:'Jiya',marks:80})
+
+var m1 =function () {emit(this.name,this.marks)}
+> var r1 =function(name,marks){return Array.sum(marks)}
+> db.data.mapReduce(m1,r1,{out:"Total"})
+> db.Total.find()
+

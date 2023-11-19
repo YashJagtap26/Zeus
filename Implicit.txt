@@ -1,0 +1,60 @@
+DECLARE
+  	roll_num  O_Roll_Call.Roll_no%type :='&Roll_no';
+  	division  O_Roll_Call.div%type;
+  	age_of_stud  O_Roll_Call.age%type;
+  	percent  O_Roll_Call.percentage%type;
+BEGIN
+  	SELECT Roll_no,div,age,percentage INTO roll_num,division,age_of_stud,percent FROM O_Roll_Call  WHERE Roll_no=roll_num;
+  	insert into N_Roll_Call values(roll_num,division,age_of_stud,percent);
+  	dbms_output.put_line( 'Record inserted'); 
+END;
+/
+
+
+
+/*
+
+OUTPUT : 
+
+SQL> create table O_Roll_Call(Roll_no int,div varchar(10),age int,percentage int);
+
+Table created.
+
+SQL> create table N_Roll_Call(Roll_no int,div varchar(10),age int,percentage int);
+
+Table created.
+
+SQL> insert into O_Roll_Call values(1,'b',12,89);
+
+1 row created.
+
+SQL> insert into O_Roll_Call values(2,'h',45,90);
+
+1 row created.
+
+SQL> insert into O_Roll_Call values(3,'j',34,56);
+
+1 row created.
+
+SQL> select *from O_Roll_Call;
+
+   ROLL_NO DIV		     AGE PERCENTAGE
+---------- ---------- ---------- ----------
+	 1 b		      12	 89
+	 2 h		      45	 90
+	 3 j		      34	 56
+
+SQL> @6_A_my_implicit.sql;
+Record inserted
+
+PL/SQL procedure successfully completed.
+
+SQL> select *from N_Roll_Call;
+
+   ROLL_NO DIV		     AGE PERCENTAGE
+---------- ---------- ---------- ----------
+	 1 b		      12	 89
+
+
+
+*/
